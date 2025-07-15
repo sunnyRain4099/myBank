@@ -1,0 +1,3 @@
+.ant-pro-layout .ant-pro-layout-content {
+  padding-bottom: 96px !important; /* 保持与全局底部栏的高度一致 */
+}
