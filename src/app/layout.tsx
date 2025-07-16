@@ -7,6 +7,7 @@ import { Provider, useDispatch } from "react-redux";
 import store, { AppDispatch } from "@/stores/index";
 import { getLoginUserUsingGet } from "@/api/userController";
 import { setLoginUser } from "@/stores/loginUsers";
+import AccessLayout from "@/access/accessLayout";
 
 const InitLayout: React.FC<Readonly<{ children: React.ReactNode }>> = ({
   children,
@@ -35,7 +36,9 @@ export default function RootLayout({
         <AntdRegistry>
           <Provider store={store}>
             <InitLayout>
-              <BasicLayout>{children}</BasicLayout>
+              <BasicLayout>
+                <AccessLayout>{children}</AccessLayout>
+              </BasicLayout>
             </InitLayout>
           </Provider>
         </AntdRegistry>

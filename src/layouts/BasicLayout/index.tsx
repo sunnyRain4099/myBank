@@ -13,9 +13,12 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 import GlobalFooter from "@/components/GlobalFooter";
 import "./index.css";
-import menu from "../../../public/config/menu";
+import { menus } from "../../../public/config/menu";
 import { useSelector } from "react-redux";
 import { RootState } from "@/stores";
+import getAccessibleMenus from "@/access/menuAccess";
+import MdEditor from "@/components/MdEditor";
+import MdViewer from "@/components/MdViewer";
 
 const SearchInput = () => {
   return (
@@ -51,6 +54,8 @@ interface Props {
 
 export default function BasicLayout({ children }: Props) {
   const pathname = usePathname();
+
+  const [text, setText] = useState<string>("");
 
   const loginUser = useSelector((state: RootState) => state.loginUser);
   return (
@@ -125,7 +130,7 @@ export default function BasicLayout({ children }: Props) {
         onMenuHeaderClick={(e) => console.log(e)}
         // 定义有哪些菜单
         menuDataRender={() => {
-          return menu;
+          return getAccessibleMenus(loginUser, menus);
         }}
         //定义了菜单项的渲染方式
         menuItemRender={(item, dom) => (
@@ -134,6 +139,8 @@ export default function BasicLayout({ children }: Props) {
           </Link>
         )}
       >
+        <MdEditor value={text} onChange={setText} />
+        <MdViewer value={text} />
         {children}
       </ProLayout>
     </div>
