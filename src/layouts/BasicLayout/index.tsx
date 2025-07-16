@@ -1,13 +1,9 @@
 "use client";
 import {
   GithubFilled,
-  InfoCircleFilled,
   LogoutOutlined,
-  PlusCircleFilled,
-  QuestionCircleFilled,
   SearchOutlined,
 } from "@ant-design/icons";
-import type { ProSettings } from "@ant-design/pro-components";
 import { ProLayout } from "@ant-design/pro-components";
 
 import { Dropdown, Input, Popover, theme } from "antd";
@@ -17,7 +13,9 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 import GlobalFooter from "@/components/GlobalFooter";
 import "./index.css";
-import menu from "../../../.next/config/menu";
+import menu from "../../../public/config/menu";
+import { useSelector } from "react-redux";
+import { RootState } from "@/stores";
 
 const SearchInput = () => {
   return (
@@ -54,6 +52,7 @@ interface Props {
 export default function BasicLayout({ children }: Props) {
   const pathname = usePathname();
 
+  const loginUser = useSelector((state: RootState) => state.loginUser);
   return (
     <div
       id="basicLayout"
@@ -77,9 +76,9 @@ export default function BasicLayout({ children }: Props) {
           pathname,
         }}
         avatarProps={{
-          src: "https://gw.alipayobjects.com/zos/antfincdn/efFD%24IOql2/weixintupian_20170331104822.jpg",
+          src: loginUser.userAvatar || "/assets/logo.png",
           size: "small",
-          title: "七妮妮",
+          title: loginUser.userName || "未登录",
           render: (props, dom) => {
             return (
               <Dropdown
