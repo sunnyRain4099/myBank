@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { findAllMenuItemByPath } from "../../public/config/menu";
 import ACCESS_ENUM from "./accessEnum";
 import checkAccess from "./checkAccess";
-import Forbidden from "@/app/questions/forbidden";
+import Forbidden from "@/app/forbidden";
 import { MenuDataItem } from "@ant-design/pro-components";
 
 /*

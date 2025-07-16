@@ -17,8 +17,6 @@ import { menus } from "../../../public/config/menu";
 import { useSelector } from "react-redux";
 import { RootState } from "@/stores";
 import getAccessibleMenus from "@/access/menuAccess";
-import MdEditor from "@/components/MdEditor";
-import MdViewer from "@/components/MdViewer";
 
 const SearchInput = () => {
   return (
@@ -139,8 +137,6 @@ export default function BasicLayout({ children }: Props) {
           </Link>
         )}
       >
-        <MdEditor value={text} onChange={setText} />
-        <MdViewer value={text} />
         {children}
       </ProLayout>
     </div>
