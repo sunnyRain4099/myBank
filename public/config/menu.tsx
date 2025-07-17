@@ -17,8 +17,8 @@ export const menus: MenuDataItem[] = [
     name: "题目",
   },
   {
-    name: "面试鸭",
-    path: "https://mianshiya.com",
+    name: "Github",
+    path: "https://github.com/sunnyRain4099",
     target: "_blank",
   },
   {
