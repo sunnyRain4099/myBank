@@ -1,17 +1,47 @@
 "use client";
+import { userLoginUsingPost } from "@/api/userController";
+import { AppDispatch } from "@/stores";
+import { setLoginUser } from "@/stores/loginUsers";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
-import { LoginForm, ProFormText } from "@ant-design/pro-components";
+import { LoginForm, ProForm, ProFormText } from "@ant-design/pro-components";
+import { message } from "antd";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useDispatch } from "react-redux";
 
 /*
  *用户登录页面
  */
 
-const userLoginPage: React.FC = () => {
+const UserLoginPage: React.FC = () => {
+  /*
+   *提交
+   */
+  const [form] = ProForm.useForm();
+  const dispatch = useDispatch<AppDispatch>();
+  const router = useRouter();
+
+  const doSubmit = async (values: API.UserLoginRequest) => {
+    try {
+      const res = await userLoginUsingPost(values);
+      console.log(res.data);
+      if (res.data) {
+        message.success("登录成功");
+        // 保存用户登录状态
+        dispatch(setLoginUser(res.data));
+        router.replace("/");
+        form.resetFields();
+      }
+    } catch (e) {
+      message.error("登录失败，" + e.message);
+    }
+  };
+
   return (
     <div id="userLoginPage">
       <LoginForm
+        form={form}
         logo={
           <Image
             src="/assets/logo.png"
@@ -22,6 +52,7 @@ const userLoginPage: React.FC = () => {
         }
         title="用户登录"
         subTitle="面试刷题网站"
+        onFinish={doSubmit}
       >
         <ProFormText
           name="userAccount"
@@ -59,12 +90,11 @@ const userLoginPage: React.FC = () => {
           }}
         >
           还没有账号？
-          <Link href="/user/register"></Link>
-          去注册
+          <Link href="/user/register">去注册</Link>
         </div>
       </LoginForm>
     </div>
   );
 };
 
-export default userLoginPage;
+export default UserLoginPage;

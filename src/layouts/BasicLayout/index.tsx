@@ -6,17 +6,20 @@ import {
 } from "@ant-design/icons";
 import { ProLayout } from "@ant-design/pro-components";
 
-import { Dropdown, Input, Popover, theme } from "antd";
+import { Dropdown, Input, message, Popover, theme } from "antd";
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import GlobalFooter from "@/components/GlobalFooter";
 import "./index.css";
 import { menus } from "../../../public/config/menu";
-import { useSelector } from "react-redux";
-import { RootState } from "@/stores";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/stores";
 import getAccessibleMenus from "@/access/menuAccess";
+import { userLogoutUsingPost } from "@/api/userController";
+import { setLoginUser } from "@/stores/loginUsers";
+import { DEFAULT_USER } from "@/constants/user";
 
 const SearchInput = () => {
   return (
@@ -52,10 +55,25 @@ interface Props {
 
 export default function BasicLayout({ children }: Props) {
   const pathname = usePathname();
-
+  const router = useRouter();
   const [text, setText] = useState<string>("");
-
+  const dispatch = useDispatch<AppDispatch>();
   const loginUser = useSelector((state: RootState) => state.loginUser);
+
+  /*
+   *用户注销
+   */
+  const userLoginOut = async () => {
+    try {
+      const res = await userLogoutUsingPost();
+      console.log(res.data);
+      message.success("退出登录");
+      dispatch(setLoginUser(DEFAULT_USER));
+      router.push("/user/login");
+    } catch (e) {
+      message.error("退出失败，" + e.message);
+    }
+  };
   return (
     <div
       id="basicLayout"
@@ -81,8 +99,13 @@ export default function BasicLayout({ children }: Props) {
         avatarProps={{
           src: loginUser.userAvatar || "/assets/logo.png",
           size: "small",
-          title: loginUser.userName || "未登录",
+          title: loginUser.userName || "墨小菊",
           render: (props, dom) => {
+            if (!loginUser.id) {
+              return (
+                <div onClick={() => router.push("/user/login")}>{dom}</div>
+              );
+            }
             return (
               <Dropdown
                 menu={{
@@ -93,6 +116,12 @@ export default function BasicLayout({ children }: Props) {
                       label: "退出登录",
                     },
                   ],
+                  onClick: (event: { key: React.Key }) => {
+                    const { key } = event;
+                    if (key === "logout") {
+                      userLoginOut();
+                    }
+                  },
                 }}
               >
                 {dom}

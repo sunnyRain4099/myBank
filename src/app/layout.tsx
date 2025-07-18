@@ -16,6 +16,7 @@ const InitLayout: React.FC<Readonly<{ children: React.ReactNode }>> = ({
   const doInitLoginUser = useCallback(async () => {
     const res = await getLoginUserUsingGet();
     if (res.data) {
+      dispatch(setLoginUser(res.data));
     } else {
     }
   }, []);
