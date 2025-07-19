@@ -25,7 +25,6 @@ const UserLoginPage: React.FC = () => {
   const doSubmit = async (values: API.UserLoginRequest) => {
     try {
       const res = await userLoginUsingPost(values);
-      console.log(res.data);
       if (res.data) {
         message.success("登录成功");
         // 保存用户登录状态
