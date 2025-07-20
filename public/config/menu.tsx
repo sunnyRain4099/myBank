@@ -9,7 +9,7 @@ export const menus: MenuDataItem[] = [
     name: "主页",
   },
   {
-    path: "/banks",
+    path: "/bank",
     name: "题库",
   },
   {
