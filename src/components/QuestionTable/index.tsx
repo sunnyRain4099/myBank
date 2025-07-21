@@ -4,6 +4,7 @@ import type { ActionType, ProColumns } from "@ant-design/pro-components";
 import { ProTable } from "@ant-design/pro-components";
 import React, { useRef, useState } from "react";
 import TagList from "../TagList";
+import Link from "next/link";
 
 interface Props {
   //默认值
@@ -31,23 +32,27 @@ const QuestionTable: React.FC = (props: Props) => {
   /**
    * 表格列配置
    */
-  const columns: ProColumns<API.Question>[] = [
+  const columns: ProColumns<API.QuestionVO>[] = [
     {
       title: "标题",
       dataIndex: "title",
       valueType: "text",
+      render: (_, record) => {
+        // const tagList = JSON.parse(record.tagList || "[]");
+        return <Link href={`/question/${record.id}`}>{record.title}</Link>;
+      },
     },
 
     {
       title: "标签",
-      dataIndex: "tags",
+      dataIndex: "tagList",
       valueType: "select",
       fieldProps: {
         mode: "tags",
       },
       render: (_, record) => {
-        const tagList = JSON.parse(record.tags || "[]");
-        return <TagList tagList={tagList} />;
+        // const tagList = JSON.parse(record.tagList || "[]");
+        return <TagList tagList={record.tagList} />;
       },
     },
   ];
