@@ -22,7 +22,7 @@ export default async function QuestionsPage({
       title: searchText,
       pageSize: pageSize,
       sortField: "createTime",
-      sortOrder: "desc",
+      sortOrder: "descend",
     });
     questionList = res.data.records ?? [];
   } catch (error) {

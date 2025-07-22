@@ -1,6 +1,6 @@
 "use serve";
 import "./index.css";
-import { Avatar, Button, Card, Divider, Flex, Typography } from "antd";
+import { Avatar, Button, Card, Divider, Flex, Menu, Typography } from "antd";
 import Meta from "antd/es/card/Meta";
 import Paragraph from "antd/es/typography/Paragraph";
 import Title from "antd/es/typography/Title";
@@ -9,6 +9,8 @@ import { getQuestionVoByIdUsingGet } from "@/api/questionController";
 import { getQuestionBankVoByIdUsingGet } from "@/api/questionBankController";
 import Sider from "antd/es/layout/Sider";
 import { Content } from "antd/es/layout/layout";
+import QuestionCard from "@/components/QuestionCard";
+import Link from "next/link";
 /*
  *题库题目详情页
  */
@@ -52,9 +54,14 @@ export default async function BankQuestionPage({ params }) {
   }
   //题目菜单列表
   const questionMenuItemList = (banks.questionPage?.records || []).map((q) => {
+    // console.log(q, "q");
     return {
-      key: q.title,
-      label: q.id,
+      label: (
+        <Link href={`/banks/${questionBankId}/question/${q.id}`}>
+          {q.title}
+        </Link>
+      ),
+      key: q.id,
     };
   });
 
@@ -71,8 +78,14 @@ export default async function BankQuestionPage({ params }) {
           <Title level={4} style={{ padding: "0 20px" }}>
             {banks.title}
           </Title>
+          <Menu
+            items={questionMenuItemList}
+            selectedKeys={[question.id]}
+          ></Menu>
         </Sider>
-        <Content>题目详情</Content>
+        <Content>
+          <QuestionCard question={question}></QuestionCard>
+        </Content>
       </Flex>
     </div>
   );

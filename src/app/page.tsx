@@ -17,7 +17,7 @@ export default async function HomePage() {
     const res = await listQuestionBankVoByPageUsingPost({
       pageSize: 12,
       sortField: "createTime",
-      sortOrder: "desc",
+      sortOrder: "descend",
     });
     questionBankList = res.data.records ?? [];
   } catch (error) {
@@ -28,7 +28,7 @@ export default async function HomePage() {
     const res = await listQuestionVoByPageUsingPost({
       pageSize: 12,
       sortField: "createTime",
-      sortOrder: "desc",
+      sortOrder: "descend",
     });
     questionList = res.data.records ?? [];
   } catch (error) {
