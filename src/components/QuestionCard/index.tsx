@@ -5,6 +5,7 @@ import Link from "next/link";
 import Title from "antd/es/typography/Title";
 import TagList from "../TagList";
 import MdViewer from "../MdViewer";
+import useAddUserSignInRecord from "@/hooks/useAddUserSignInRecord";
 
 interface Props {
   question?: API.QuestionVO;
@@ -17,7 +18,8 @@ interface Props {
  */
 const QuestionCard = (props: Props) => {
   const { question = [] } = props;
-
+  //签到钩子
+  useAddUserSignInRecord();
   return (
     <div className="question-card">
       <Card>

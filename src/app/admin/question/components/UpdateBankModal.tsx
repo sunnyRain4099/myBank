@@ -28,48 +28,83 @@ const UpdateBankModal: React.FC<Props> = (props) => {
     API.QuestionBankVO[]
   >([]);
 
-  //索取所属题库列表
-  const getCurrentQuestionBankIdList = async () => {
-    try {
-      const res = await listQuestionBankQuestionVoByPageUsingPost({
-        questionId,
-        pageSize: 20,
-      });
-      const list = (res.data?.records ?? []).map((item) => item.questionBankId);
+  // //索取所属题库列表
+  // const getCurrentQuestionBankIdList = async () => {
+  //   try {
+  //     const res = await listQuestionBankQuestionVoByPageUsingPost({
+  //       questionId,
+  //       pageSize: 20,
+  //     });
+  //     const list = (res.data?.records ?? []).map((item) => item.questionBankId);
 
+  //     form.setFieldValue("questionBankIdList", list);
+  //   } catch (e) {
+  //     console.error("获取题目所属题库列表详情失败，" + e.message);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   console.log(questionId, "questionId");
+
+  //   if (questionId) {
+  //     getCurrentQuestionBankIdList();
+  //   }
+  // }, [questionId]);
+
+  // //获取题库列表
+  // const getQuestionBankList = async () => {
+  //   //题库全量获取
+  //   const pageSize = 200;
+  //   try {
+  //     const res = await listQuestionBankVoByPageUsingPost({
+  //       pageSize,
+  //       sortField: "createTime",
+  //       sortOrder: "descend",
+  //     });
+  //     setQuestionBankList(res.data?.records ?? []);
+  //   } catch (e) {
+  //     console.error("获取题库列表失败，" + e.message);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   getQuestionBankList();
+  // }, []);
+  const fetchData = async () => {
+    try {
+      const [questionBankRes, questionBankListRes] = await Promise.all([
+        listQuestionBankQuestionVoByPageUsingPost({
+          questionId,
+          pageSize: 20,
+        }),
+        listQuestionBankVoByPageUsingPost({
+          pageSize: 200,
+          sortField: "createTime",
+          sortOrder: "descend",
+        }),
+      ]);
+
+      // 处理题目所属题库ID列表
+      const list = (questionBankRes.data?.records ?? []).map(
+        (item) => item.questionBankId
+      );
       form.setFieldValue("questionBankIdList", list);
+
+      // 设置题库列表
+      setQuestionBankList(questionBankListRes.data?.records ?? []);
     } catch (e) {
-      console.error("获取题目所属题库列表详情失败，" + e.message);
+      console.error("获取数据失败，" + e.message);
     }
   };
 
+  // 调用并发方法
   useEffect(() => {
     console.log(questionId, "questionId");
 
     if (questionId) {
-      getCurrentQuestionBankIdList();
+      fetchData();
     }
   }, [questionId]);
-
-  //获取题库列表
-  const getQuestionBankList = async () => {
-    //题库全量获取
-    const pageSize = 200;
-    try {
-      const res = await listQuestionBankVoByPageUsingPost({
-        pageSize,
-        sortField: "createTime",
-        sortOrder: "descend",
-      });
-      setQuestionBankList(res.data?.records ?? []);
-    } catch (e) {
-      console.error("获取题库列表失败，" + e.message);
-    }
-  };
-
-  useEffect(() => {
-    getQuestionBankList();
-  }, []);
 
   return (
     <Modal
